@@ -14,11 +14,14 @@ Year
 Month
 Value
 ```
-Your goal would be to visualise historically the number of accidents per category (`column1`). The dataset currently contains values until the end of 2020. Create an application that forecasts the values for:
+Your goal would be to visualise historically the number of accidents per category (`column1`). 
+![year](year.jpg)
+![month](month.jpg)
+The dataset currently contains values until the end of 2021. Create an application that forecasts the values for:
 ```
 Category: 'Alkoholunfälle'
-Type: 'insgesamt
-Year: '2021'
+Type: 'insgesamt'
+Year: '2022'
 Month: '01'
 ```
 ## Mission 2: Publish your source code & Deploy
