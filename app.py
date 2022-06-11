@@ -27,7 +27,7 @@ async def predict(item: Item):
         return responses.JSONResponse({"error": "Invalid month"})
     else:
         target = [0, 1, year, month]
-        prediction = model.predict([features])
+        prediction = model.predict([target])
         return responses.JSONResponse({'prediction': prediction[0]})
     
 if __name__ == "__main__":
