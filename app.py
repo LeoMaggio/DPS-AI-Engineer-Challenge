@@ -1,6 +1,7 @@
 import pickle
 import json
 import cherrypy
+import os
 
 class DeployApp(object):
     exposed = True
@@ -42,6 +43,6 @@ if __name__ == "__main__":
                   'tools.sessions.on': True}}
     cherrypy.tree.mount(DeployApp(), '/', conf)
     cherrypy.config.update({'server.socket_host': '0.0.0.0'})
-    cherrypy.config.update({'server.socket_port': 5000})
+    cherrypy.config.update({'server.socket_port': os.environ.get('PORT')})
     cherrypy.engine.start()
     cherrypy.engine.block()
