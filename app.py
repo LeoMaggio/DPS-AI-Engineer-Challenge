@@ -1,34 +1,39 @@
 import pickle
-from fastapi import FastAPI, responses
-from pydantic import BaseModel
+from flask import Flask, jsonify, request, render_template
 
-app = FastAPI()
+app = Flask(__name__)
 model = pickle.load(open('./model.pkl', 'rb'))
 
 class Item(BaseModel):
     JAHR: int
     MONAT: int
 
-@app.get("/")
-async def root():
-   return {"message": "Hello World"}
+@app.route("/", methods = ["GET","POST"])
+def index():
+    output = ""
+    if request.method == "POST":
+        year = request.form["year"]
+        month = request.form["month"]
+        output = pred.prediction(year, month)     
 
-@app.post("/predict/")
-async def predict(item: Item):
-    item = item.dict()
-    data = list(item.values())
-    year = data[0]
-    month = data[1]
-    if year is None or month is None:
-        return responses.JSONResponse({"error": "Missing input value"})
-    elif year < 2022:
-        return responses.JSONResponse({"error": "Select a year in the future"})
-    elif month < 1 or month > 12:
-        return responses.JSONResponse({"error": "Invalid month"})
-    else:
-        target = [0, 1, year, month]
-        prediction = model.predict([target])
-        return responses.JSONResponse({'prediction': prediction[0]})
+    return render_template("index.html", value=output)
+
+@app.route("/predict", methods = ["POST"])
+def predict():
+    output = ""
+    if request.method == "POST":
+        year = request.json["year"]
+        month = request.json["month"]
+        if year is None or month is None:
+            return {"error": "Missing input value"}, 400
+        elif year < 2022:
+            return {"error": "Select a year in the future"}, 400
+        elif month < 1 or month > 12:
+            return {"error": "Invalid month"}, 400
+        else:
+            target = [0, 1, year, month]
+            prediction = model.predict([target])
+            return jsonify({'prediction': prediction[0]})
     
 if __name__ == "__main__":
-    uvicorn.run(app, host='93.34.148.69', port=int(os.environ.get('PORT', 5000)))
+    app.run(debug = True)
