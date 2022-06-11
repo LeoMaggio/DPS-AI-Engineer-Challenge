@@ -6,8 +6,6 @@ app = FastAPI()
 model = pickle.load(open('./model.pkl', 'rb'))
 
 class Item(BaseModel):
-    MONATSZAHL: int
-    AUSPRAEGUNG: int
     JAHR: int
     MONAT: int
 
@@ -28,7 +26,7 @@ async def predict(item: Item):
     elif month < 1 or month > 12:
         return {"error": "Invalid month"}, 400
     else:
-        target = features = [0, 1, year, month]
+        target = [0, 1, year, month]
         prediction = model.predict([features])
         return {'prediction': prediction[0]}, 200
     
