@@ -1,5 +1,5 @@
 import pickle
-from fastapi import FastAPI
+from fastapi import FastAPI, responses
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -20,15 +20,15 @@ async def predict(item: Item):
     year = data[0]
     month = data[1]
     if year is None or month is None:
-        return {"error": "Missing input value"}, 400
+        return responses.JSONResponse({"error": "Missing input value"})
     elif year < 2022:
-        return {"error": "Select a year in the future"}, 400
+        return responses.JSONResponse({"error": "Select a year in the future"})
     elif month < 1 or month > 12:
-        return {"error": "Invalid month"}, 400
+        return responses.JSONResponse({"error": "Invalid month"})
     else:
         target = [0, 1, year, month]
         prediction = model.predict([features])
-        return {'prediction': prediction[0]}, 200
+        return responses.JSONResponse({'prediction': prediction[0]})
     
 if __name__ == "__main__":
     uvicorn.run(app, host='127.0.0.1', port=8000)
