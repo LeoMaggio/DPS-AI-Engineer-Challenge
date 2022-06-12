@@ -4,10 +4,6 @@ from flask import Flask, jsonify, request, render_template
 app = Flask(__name__)
 model = pickle.load(open('./model.pkl', 'rb'))
 
-class Item(BaseModel):
-    JAHR: int
-    MONAT: int
-
 @app.route("/", methods = ["GET","POST"])
 def index():
     output = ""
