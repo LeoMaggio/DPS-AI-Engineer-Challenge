@@ -7,11 +7,15 @@
 <body>
     <h1>Hello World!</h1>
     <h2>Select the year and the month to predict car accidents!</h2>
-    <form method="post">
-        <input type="text" placeholder="Year" id="year" name="year" required>
-        <input type="text" placeholder="Month" id="month" name="month" required>
-        <button type="submit">Submit</button>
+    <form action="predict" method="post">
+        <input type="number" placeholder="Year" id="year" name="year" min="2022" required>
+        <br>
+        <input type="number" placeholder="Month" id="month" name="month" min="1" max="12" required>
+        <br>
+        <input type="submit" value="SUBMIT" id="predict">
     </form>
-    <p> Prediction: </p> {{value}}
+	{% for message in get_flashed_messages()%}
+		{{message}}
+	{% endfor %}
 </body>
 </html>
